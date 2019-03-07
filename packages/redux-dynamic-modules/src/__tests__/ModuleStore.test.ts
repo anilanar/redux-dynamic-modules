@@ -1,3 +1,4 @@
+import { compose } from "redux";
 import { createStore } from "../ModuleStore";
 import { IModuleTuple, IModule } from "../Contracts";
 
@@ -19,7 +20,7 @@ describe("Module Store tests", () => {
     };
 
     it("Flattens modules", () => {
-        const store = createStore({}, [], [], testModule);
+        const store = createStore({}, [], [], compose, testModule);
 
         const nestedModules: IModuleTuple = [
             { id: "1" },

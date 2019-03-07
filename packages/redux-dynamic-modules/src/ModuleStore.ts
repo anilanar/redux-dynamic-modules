@@ -3,8 +3,8 @@ import {
     createStore as createReduxStore,
     DeepPartial,
     StoreEnhancer,
+    compose as reduxCompose,
 } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 import { getMiddlewareManager } from ".";
 import { IExtension, IModule, IModuleStore, IModuleTuple } from "./Contracts";
 import { getModuleManager } from "./Managers/ModuleManager";
@@ -18,12 +18,14 @@ export function createStore<S1>(
     initialState: DeepPartial<S1>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     reduxModule: IModule<S1>
 ): IModuleStore<S1>;
 export function createStore<S1, S2>(
     initialState: DeepPartial<S1 & S2>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>
 ): IModuleStore<S1 & S2>;
@@ -31,6 +33,7 @@ export function createStore<S1, S2, S3>(
     initialState: DeepPartial<S1 & S2 & S3>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>,
     m3: IModule<S3>
@@ -39,6 +42,7 @@ export function createStore<S1, S2, S3, S4>(
     initialState: DeepPartial<S1 & S2 & S3 & S4>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>,
     m3: IModule<S3>,
@@ -48,6 +52,7 @@ export function createStore<S1, S2, S3, S4, S5>(
     initialState: DeepPartial<S1 & S2 & S3 & S4 & S5>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>,
     m3: IModule<S3>,
@@ -58,6 +63,7 @@ export function createStore<S1, S2, S3, S4, S5, S6>(
     initialState: DeepPartial<S1 & S2 & S3 & S4 & S5 & S6>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>,
     m3: IModule<S3>,
@@ -69,6 +75,7 @@ export function createStore<S1, S2, S3, S4, S5, S6, S7>(
     initialState: DeepPartial<S1 & S2 & S3 & S4 & S5 & S6 & S7>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>,
     m3: IModule<S3>,
@@ -81,6 +88,7 @@ export function createStore<S1, S2, S3, S4, S5, S6, S7, S8>(
     initialState: DeepPartial<S1 & S2 & S3 & S4 & S5 & S6 & S7 & S8>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     m1: IModule<S1>,
     m2: IModule<S2>,
     m3: IModule<S3>,
@@ -94,12 +102,14 @@ export function createStore<State>(
     initialState: DeepPartial<State>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     ...initialModules: IModule<any>[]
 ): IModuleStore<State>;
 export function createStore<State>(
     initialState: DeepPartial<State>,
     enhancers: StoreEnhancer[],
     extensions: IExtension[],
+    compose: typeof reduxCompose,
     ...initialModules: IModule<any>[]
 ): IModuleStore<State> {
     if (!extensions) {
@@ -118,7 +128,7 @@ export function createStore<State>(
         getMiddlewareManager(),
         (a, b) => a === b
     );
-    const enhancer = composeWithDevTools(
+    const enhancer = compose(
         ...enhancers,
         applyMiddleware(...extensionMiddleware, middlewareManager.enhancer)
     );
